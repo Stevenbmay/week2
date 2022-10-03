@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .color {
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .oldColor {
+            height: 50px;
+
+        }
+
+        .main {
+            display: flex;
+
+
+        }
+
+        .m {
+            flex-basis: 100px;
+
+
+
+        }
+
+        .c {
+            text-align: center;
+            width: 300px;
+            height: 50px;
+            border: 1px solid black;
+
+        }
+
+        .look {
+            flex-basis: 100px;
+            height: 100px;
+            border: 1px solid black;
+
+        }
+    </style>
+</head>
+
+<body>
+    <main class="main">
+        <div>
+            <canvas id="canvas" width="700" height="500" style="border:1px solid black;"></canvas>
+        </div>
+
+        <section class="m" id="n"></section>
+
+    </main>
+    <div class="color">
+        <div class="look" id="look"></div>
+        <div id=range>
+            <div>R<input type="range" min="0" max="255" id="red"></div>
+            <div>G<input type="range" min="0" max="255" id="green"></div>
+            <div>B<input type="range" min="0" max="255" id="blue"></div>
+        </div>
+    </div>
+    <div class="color">
+        <div class="c">Save</div>
+    </div>
+
+</body>
+<script>
+    // i learned how to make a canvas with https://daily-dev-tips.com/posts/javascript-mouse-drawing-on-the-canvas/
+    let color = "rgb(0, 0, 255)"
+    let ol = false
+    let olColor
+    function colors() {
+        let red = document.getElementById("red")
+        let r = red.value;
+        let green = document.getElementById("green")
+        let g = green.value;
+        let blue = document.getElementById("blue")
+        let b = blue.value;
+        if (ol == true) {
+            color = olColor;
+        }
+        else {
+            color = 'rgb(' + r + ',' + g + ',' + b + ')'
+        }
+
+        return color
+    }
+    colors()
+    let look = document.getElementById("look")
+    look.style.backgroundColor = color
+
+    let old = document.querySelectorAll(".oldColor");
+    old.forEach((e) => {
+        e.addEventListener("click", oldlor);
+    })
+
+    function save() {
+        let newColor = document.createElement("div")
+        newColor.addEventListener("click", oldlor);
+        document.getElementById('n').appendChild(newColor);
+        newColor.classList.add("oldColor")
+        newColor.style.height = "50px";
+        newColor.style.width = "50px";
+        newColor.style.backgroundColor = colors();
+        newColor.style.borderRadius = "50%"
+
+    }
+    function oldlor(e) {
+        olColor = e.target.style.backgroundColor
+        ol = true
+        console.log(e.target.style.backgroundColor);
+
+    }
+
+
+    let sel = document.querySelectorAll(".c");
+    sel.forEach((e) => {
+        e.addEventListener("click", save);
+    })
+    let f = document.querySelectorAll("#range");
+    function fix() {
+        ol = false
+    }
+
+    f.forEach((e) => {
+        e.addEventListener("click", fix);
+    })
+
+
+
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let coord = { x: 0, y: 0 };
+    document.addEventListener('mousedown', start);
+    document.addEventListener('mouseup', stop);
+
+    function start(e) {
+        document.addEventListener('mousemove', draw);
+        reposition(e);
+    }
+
+    function reposition(e) {
+        coord.x = e.clientX - canvas.offsetLeft;
+        coord.y = e.clientY - canvas.offsetTop;
+    }
+
+    function stop() {
+        document.removeEventListener('mousemove', draw);
+    }
+    function draw(e) {
+        ctx.beginPath();
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = colors();
+        look.style.backgroundColor = colors()
+        ctx.moveTo(coord.x, coord.y);
+        reposition(e);
+        ctx.lineTo(coord.x, coord.y);
+        ctx.stroke();
+    }
+
+
+
+</script>
+
+</html>

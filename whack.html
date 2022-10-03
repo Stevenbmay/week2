@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        div {
+            height: 100px;
+            flex-basis: 19%;
+            border: 1px solid black;
+        }
+
+        .flex-container {
+            width: 100%;
+            flex: auto;
+            flex-flow: wrap;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .but-start {
+            flex-basis: calc(100% / 5);
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+    </head>
+
+    <body>
+        <main class="flex-container">
+            <span id="count">0</span>
+            <button class="but-start" id="start">Begin!</button>
+            <input type="radio" value="easy" name="dif" id="easy">
+            <input type="radio" value="med" name="dif" id="med">
+            <input type="radio" value="hard" name="dif" id=hard>
+            <span id="clock"></span>
+        </main>
+        <main class="flex-container">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </main>
+        <script src="./whackamole.js"></script>
+    </body>
+
+    <script>
+        const hitCount = { hit: 1 };
+        let games = false;
+
+        function clickLog(e) {
+            let targetBGColor = "green";
+            let clickBGColor = e.target.className;
+            console.log(clickBGColor);
+            if (clickBGColor === targetBGColor) {
+                // hitCount++
+                console.log("hit");
+                document.getElementById("count").innerText = hitCount.hit++;
+            } else {
+                console.log("miss");
+            }
+        }
+
+        let divClick = document.querySelectorAll("div");
+
+        divClick.forEach((btn) => {
+            btn.addEventListener("click", clickLog);
+        });
+
+        let butStart = document.querySelectorAll("#start");
+
+        butStart.forEach((btn) => {
+            btn.addEventListener("click", playGame);
+        });
+
+        let divMole = document.getElementsByTagName("div");
+
+        let clock = document.getElementById("clock");
+        let timer = 10;
+        let timeRef = 1000;
+        let ram = 1000;
+
+
+        clock.innerText = timer;
+
+        //one random box, higlight, move on
+
+        function highlightDiv() {
+            let randomDiv = divMole[Math.floor(Math.random() * divMole.length)];
+            randomDiv.className = "green";
+            setTimeout(() => {
+                randomDiv.className = "";
+                if (games) {
+                    setTimeout(highlightDiv, 500);
+                }
+            }, ram);
+        }
+        function timerCount() {
+            let timeRef = setInterval(() => {
+                timer--;
+                clock.innerText = timer;
+            }, 1000);
+
+            setTimeout(() => {
+                clearInterval(timeRef);
+            }, timer * 1000);
+        }
+
+        function playGame() {
+            if (games == false) {
+                games = true;
+                highlightDiv();
+                if (document.getElementById("med").checked) {
+                    setTimeout(() => {
+                        highlightDiv()
+                    }, 500)
+                    ram = 800;
+                }
+                if (document.getElementById('hard').checked) {
+                    setTimeout(() => {
+                        highlightDiv()
+                    }, 300)
+                    setTimeout(() => {
+                        highlightDiv()
+                    }, 500)
+                    ram = 500;
+                }
+                timerCount();
+                setTimeout(() => {
+                    clearInterval(timeRef);
+                    games = false;
+                    timer = 10;
+                }, timer * 1000);
+                document.getElementById("count").innerText = "0";
+                hitCount.hit = 1;
+                clock.innerText = timer;
+            }
+
+        }
+
+    </script>
+
+</html>
