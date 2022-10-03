@@ -75,6 +75,12 @@
     let color = "rgb(0, 0, 255)"
     let ol = false
     let olColor
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let coord = { x: 0, y: 0 };
+    document.addEventListener('mousedown', start);
+    document.addEventListener('mouseup', stop);
+
     function colors() {
         let red = document.getElementById("red")
         let r = red.value;
@@ -109,8 +115,8 @@
         newColor.style.width = "50px";
         newColor.style.backgroundColor = colors();
         newColor.style.borderRadius = "50%"
-
     }
+
     function oldlor(e) {
         olColor = e.target.style.backgroundColor
         ol = true
@@ -118,11 +124,11 @@
 
     }
 
-
     let sel = document.querySelectorAll(".c");
     sel.forEach((e) => {
         e.addEventListener("click", save);
     })
+
     let f = document.querySelectorAll("#range");
     function fix() {
         ol = false
@@ -131,15 +137,6 @@
     f.forEach((e) => {
         e.addEventListener("click", fix);
     })
-
-
-
-
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let coord = { x: 0, y: 0 };
-    document.addEventListener('mousedown', start);
-    document.addEventListener('mouseup', stop);
 
     function start(e) {
         document.addEventListener('mousemove', draw);
@@ -154,9 +151,10 @@
     function stop() {
         document.removeEventListener('mousemove', draw);
     }
+
     function draw(e) {
         ctx.beginPath();
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 6;
         ctx.lineCap = 'round';
         ctx.strokeStyle = colors();
         look.style.backgroundColor = colors()
@@ -165,9 +163,6 @@
         ctx.lineTo(coord.x, coord.y);
         ctx.stroke();
     }
-
-
-
 </script>
 
 </html>
